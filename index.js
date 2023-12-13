@@ -40,6 +40,8 @@ async function run() {
     const RequestCollection = client.db("Asset-Management").collection("Requests");
     const PkgCollection = client.db("Asset-Management").collection("pkg");
     const PaymentCollection = client.db("Asset-Management").collection("Payment");
+    const ProjectCollection = client.db("Asset-Management").collection("Project");
+    const ReportCollection = client.db("Asset-Management").collection("Report");
 
      // jwt related api
      app.post("/jwt", async (req, res) => {
@@ -266,6 +268,32 @@ async function run() {
 
       // res.send({ paymentResult, deleteResult });
       res.send({ paymentResult});
+    })
+
+    app.get("/Project", async (req, res) => {
+      const result = await ProjectCollection.find().toArray();
+      res.send(result);
+    });
+    app.post("/Project", async (req, res) => {
+      const asset = req.body;
+      const result = await ProjectCollection.insertOne(asset);
+      res.send(result);
+    });
+
+    app.get("/Reports", async (req, res) => {
+      const result = await ReportCollection.find().toArray();
+      res.send(result);
+    });
+    app.post("/Reports",  async (req, res) => {
+      const asset = req.body;
+      const result = await ReportCollection.insertOne(asset);
+      res.send(result);
+    });
+    app.delete('/Reports/:id', async(req , res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await ReportCollection.deleteOne(query);
+      res.send(result);
     })
 
 
